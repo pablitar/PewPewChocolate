@@ -10,7 +10,7 @@ import com.paranoidkiwi.chocolate.core.reactions.annotations.io.keyboard.OnKeyPr
 import com.paranoidkiwi.chocolate.core.reactions.enums.Key
 
 class GameOverComponent(scene: PewPewGameScene) extends VisibleComponent {
-  this.setScene(scene.asInstanceOf[GameScene])
+  this.setScene(scene)
 
   val gameOverLabel = new Label(new Font(Font.SERIF, Font.BOLD, 48), Color.ORANGE, "Game Over!", "Press enter to restart")
 

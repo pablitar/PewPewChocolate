@@ -9,5 +9,5 @@ import com.paranoidkiwi.chocolate.core.appearances.Appearance
 
 class PlainBackground(scene: PewPewGameScene, val color: Color) extends VisibleComponent {
   this.setScene(scene)
-  this.setAppearance(new Rectangle(color, this.getGame().getDisplayWidth(), this.getGame().getDisplayHeight()).asInstanceOf[Appearance])
+  this.setAppearance(new Rectangle(color, this.getGame().getDisplayWidth(), this.getGame().getDisplayHeight()))
 }
