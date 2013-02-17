@@ -21,12 +21,13 @@ trait MovableWithKeyboard extends VisibleComponent with SpeedyComponent {
 
   @OnUpdate
   override def update(state: UpdateEvent): Unit = {
-    accel = (0.0, 0.0)
 
     super.update(state)
 
     this.speed = (this.speed + accel * state.getDelta) absoluteMin maxSpeed
     this.speed = (this.speed.sumAndClip(this.speed.toZero(this.getDeaccelVector * state.getDelta)))
+    
+    accel = (0.0, 0.0)
 
     this.applySpeed(state)
   }

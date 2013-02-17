@@ -15,7 +15,7 @@ import com.paranoidkiwi.chocolate.core.reactions.enums.Key
 import com.paranoidkiwi.chocolate.core.reactions.annotations.io.keyboard.OnKeyReleased
 import com.paranoidkiwi.chocolate.core.reactions.events.io.keyboard.KeyEvent
 
-class PlayerShip(scene: PewPewGameScene) extends CollisionableComponent(CollisionGroups.PLAYER) with SpeedyComponent {//MovableWithKeyboard[PewPewGameScene] with CircularGameComponent {
+class PlayerShip(scene: PewPewGameScene) extends CollisionableComponent(CollisionGroups.PLAYER) with MovableWithKeyboard {//MovableWithKeyboard[PewPewGameScene] with CircularGameComponent {
 
   val coolDownTime = 0.12
 
@@ -46,7 +46,6 @@ class PlayerShip(scene: PewPewGameScene) extends CollisionableComponent(Collisio
   @OnUpdate
   override def update(state: UpdateEvent): Unit = {
     super.update(state)
-    this.moveOnUpdate(state)
 
     if (this.firing) {
       this.coolDownAndFire(state.getDelta)
@@ -102,37 +101,4 @@ class PlayerShip(scene: PewPewGameScene) extends CollisionableComponent(Collisio
     this.scene.gameOver
     this.destroy
   }
-
-  var accel: Vector2D = (0.0, 0.0)
-
-  def deaccelRate: Double = 0.5
-
-  def toIdleAccel: Vector2D =
-    speed.toZero(maxAccel)
-
-  def moveOnUpdate(state: UpdateEvent): Unit = {
-    super.update(state)
-    this.speed = (this.speed + accel * state.getDelta) absoluteMin maxSpeed
-    this.speed = (this.speed.sumAndClip(this.speed.toZero(this.getDeaccelVector * state.getDelta)))
-    this.applySpeed(state)
-    accel = (0.0, 0.0)
-  }
-
-  @OnKeyHold
-  def checkKeyBeingHeld(anEvent: KeyEvent) {
-    anEvent.getKey() match {
-      case Key.LEFT => accel.x1 = -maxAccel.x1
-      case Key.RIGHT => accel.x1 = maxAccel.x1
-      case Key.UP => accel.x2 = -maxAccel.x2
-      case Key.DOWN => accel.x2 = maxAccel.x2
-      case Key.END => accel = (-maxAccel.x1, maxAccel.x2)
-      case Key.HOME => accel = (-maxAccel.x1, -maxAccel.x2)
-      case Key.PGDN => accel = (maxAccel.x1, maxAccel.x2)
-      case Key.PGUP => accel = (maxAccel.x1, -maxAccel.x2)
-      case _ =>
-    }
-  }
-
-  def getDeaccelVector: Vector2D =
-    (if (accel.x1 == 0) maxAccel.x1 else 0.0, if (accel.x2 == 0) maxAccel.x2 else 0.0) * this.deaccelRate
 }
